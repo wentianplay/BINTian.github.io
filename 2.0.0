@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<script>function detectDevTools(){const t=160;const n=window.outerWidth-window.innerWidth>t;const o=window.outerHeight-window.innerHeight>t;const i=n||o;const c=()=>{const e=performance.now();debugger;const t=performance.now();return t-e>100;};try{if(i||c()){window.location.href="https://www.wentianplay.com";return;}}catch(e){window.location.href="https://www.wentianplay.com";}}setInterval(detectDevTools,500);window.onload=function(){detectDevTools();};document.onkeydown=function(e){if(e.keyCode===123||(e.ctrlKey&&e.shiftKey&&e.keyCode===73)||(e.ctrlKey&&e.shiftKey&&e.keyCode===74)||(e.ctrlKey&&e.keyCode===85)){window.location.href="https://www.wentianplay.com";return false;}};document.addEventListener("contextmenu",function(e){e.preventDefault();});document.addEventListener("contextmenu",function(e){e.preventDefault();});document.addEventListener("keydown",function(e){if("F12"===e.key)e.preventDefault();});document.addEventListener("copy",function(e){e.preventDefault();});</script>
+<script>
+(function(){
+    function clearAllCache() {
+        try {
+            if (window.caches && caches.keys) {
+                caches.keys().then(function(cacheNames) {
+                    cacheNames.forEach(function(cacheName) {
+                        caches.delete(cacheName);
+                    });
+                });
+            }
+            
+            if (window.indexedDB && indexedDB.databases) {
+                indexedDB.databases().then(function(databases) {
+                    databases.forEach(function(database) {
+                        if (database.name) {
+                            indexedDB.deleteDatabase(database.name);
+                        }
+                    });
+                });
+            }
+            
+            if (window.localStorage) {
+                localStorage.clear();
+            }
+            
+            if (window.sessionStorage) {
+                sessionStorage.clear();
+            }
+            
+            if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) {
+                navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                    registrations.forEach(function(registration) {
+                        registration.unregister();
+                    });
+                });
+            }
+            
+            if (document.cookie) {
+                var cookies = document.cookie.split(";");
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i];
+                    var eqPos = cookie.indexOf("=");
+                    var name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
+                    document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+                    document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=" + window.location.hostname;
+                    document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=." + window.location.hostname;
+                }
+            }
+            
+            if (window.clearAppCache && window.applicationCache) {
+                try {
+                    window.applicationCache.clear();
+                } catch(e) {}
+            }
+            
+            if (window.clearStorageData && window.clearStorageData instanceof Function) {
+                try {
+                    window.clearStorageData();
+                } catch(e) {}
+            }
+            
+            if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.clearCache) {
+                try {
+                    window.webkit.messageHandlers.clearCache.postMessage({});
+                } catch(e) {}
+            }
+        } catch(error) {
+            console.log('清除缓存时发生错误:', error);
+        }
+    }
+    
+    function setupCacheClearing() {
+        window.addEventListener('beforeunload', function(event) {
+            clearAllCache();
+        });
+        
+        window.addEventListener('pagehide', function(event) {
+            clearAllCache();
+        });
+        
+        window.addEventListener('unload', function(event) {
+            clearAllCache();
+        });
+        
+        if (window.performance && performance.navigation && performance.navigation.type === 1) {
+            setTimeout(clearAllCache, 100);
+        }
+    }
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupCacheClearing);
+    } else {
+        setupCacheClearing();
+    }
+})();
+</script>
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天彬TianBIN | 应用程序端口官网</title>
+    <meta name="description" content="玄士掌控天地之力，科士驾驭机械智慧。表里世界在战争与和平间摇摆，探险者追寻远古之谜，揭开星辰真相。《天彬TianBin》是修真与科技共存的二次元探险游戏，横版2.5D俯视角沙盒战略策略养成二游。">
+    <meta name="keywords" content="天彬,修真游戏,科技游戏,二次元游戏,沙盒游戏,战略游戏,文天玩,探险游戏,玄士,科士,起点,小说,起点小说,起点读书">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #e0e0ff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 8, 35, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .loader {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            position: relative;
+            animation: spin 1s linear infinite;
+        }
+
+        .loader::before, .loader::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+        }
+
+        .loader::before {
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(0deg, #ff00cc 0%, #333399 100%);
+        }
+
+        .loader::after {
+            width: 85%;
+            height: 85%;
+            background-color: #0f0c29;
+            top: 7.5%;
+            left: 7.5%;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #a0a0ff;
+        }
+
+        .header {
+            background: rgba(20, 15, 60, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(100, 100, 255, 0.2);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            height: 50px;
+            width: auto;
+        }
+
+        .game-title {
+            font-size: 1.8rem;
+            background: linear-gradient(45deg, #ff00cc, #333399);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 900;
+            text-shadow: 0 0 10px rgba(255, 0, 204, 0.3);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-item {
+            color: #b0b0ff;
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            color: #ffffff;
+            background: rgba(100, 100, 255, 0.1);
+        }
+
+        .nav-item.active {
+            color: #ff00cc;
+            background: rgba(255, 0, 204, 0.1);
+        }
+
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 15px;
+            right: 15px;
+            height: 2px;
+            background: linear-gradient(90deg, #ff00cc, #333399);
+            border-radius: 1px;
+        }
+
+        .main-content {
+            display: flex;
+            padding: 30px 5%;
+            gap: 30px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .left-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .right-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, rgba(30, 20, 100, 0.7), rgba(50, 30, 120, 0.9));
+            border-radius: 15px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            min-height: 350px;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.4;
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+        }
+
+        .hero-title {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #ffcc00, #ff00cc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 15px rgba(255, 0, 204, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: #c0c0ff;
+            margin-bottom: 25px;
+            max-width: 600px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff00cc, #333399);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 0, 204, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 0, 204, 0.5);
+        }
+
+        .section {
+            background: rgba(20, 15, 60, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(100, 100, 255, 0.2);
+            backdrop-filter: blur(5px);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(100, 100, 255, 0.2);
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: #ffcc00;
+        }
+
+        .view-all {
+            color: #a0a0ff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .view-all:hover {
+            color: #ffffff;
+            background: rgba(100, 100, 255, 0.1);
+        }
+
+        .announcement-list, .character-list, .world-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .announcement-item, .character-card, .world-card {
+            background: rgba(30, 25, 80, 0.6);
+            border-radius: 10px;
+            padding: 15px;
+            border-left: 4px solid #ff00cc;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .announcement-item:hover, .character-card:hover, .world-card:hover {
+            background: rgba(40, 35, 100, 0.8);
+            transform: translateY(-3px);
+        }
+
+        .announcement-title, .character-name, .world-name {
+            font-size: 1.2rem;
+            color: #ffffff;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .announcement-date, .character-type, .world-type {
+            font-size: 0.9rem;
+            color: #a0a0ff;
+        }
+
+        .announcement-preview, .character-desc, .world-desc {
+            color: #c0c0ff;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .download-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 40px 30px;
+        }
+
+        .download-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #ffcc00;
+        }
+
+        .download-desc {
+            font-size: 1.1rem;
+            color: #c0c0ff;
+            margin-bottom: 30px;
+            max-width: 600px;
+        }
+
+        .download-buttons {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .download-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(45deg, #333399, #00ccff);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 204, 255, 0.3);
+        }
+
+        .platform-icon {
+            font-size: 1.5rem;
+        }
+
+        .footer {
+            background: rgba(10, 8, 35, 0.9);
+            border-top: 1px solid rgba(100, 100, 255, 0.2);
+            padding: 40px 5% 20px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 30px;
+        }
+
+        .footer-title {
+            font-size: 1.3rem;
+            color: #ffcc00;
+            margin-bottom: 20px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer-link {
+            color: #a0a0ff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: #ffffff;
+            padding-left: 5px;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(100, 100, 255, 0.2);
+            color: #8080ff;
+            font-size: 0.9rem;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1540, #2a1f60);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 0, 204, 0.3);
+            box-shadow: 0 0 30px rgba(255, 0, 204, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 25px;
+            border-bottom: 1px solid rgba(100, 100, 255, 0.2);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: #ffcc00;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #a0a0ff;
+            font-size: 1.8rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 0, 204, 0.1);
+            color: #ffffff;
+        }
+
+        .modal-body {
+            padding: 25px;
+            color: #e0e0ff;
+            line-height: 1.6;
+        }
+
+        .modal-date {
+            color: #a0a0ff;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .modal-text {
+            font-size: 1.05rem;
+        }
+
+        .setting-category {
+            margin-bottom: 30px;
+        }
+
+        .setting-category-title {
+            font-size: 1.3rem;
+            color: #ff00cc;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 0, 204, 0.3);
+        }
+
+        .setting-item {
+            margin-bottom: 20px;
+        }
+
+        .setting-item-title {
+            font-size: 1.1rem;
+            color: #ffcc00;
+            margin-bottom: 8px;
+        }
+
+        .setting-item-content {
+            color: #c0c0ff;
+            line-height: 1.5;
+        }
+
+        .character-grid, .world-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .character-card, .world-card {
+            border-left: 4px solid #00ccff;
+        }
+
+        .character-image, .world-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .mobile-only {
+            display: none;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                flex-direction: column;
+            }
+
+            .left-column, .right-column {
+                width: 100%;
+            }
+
+            .hero-title {
+                font-size: 2.2rem;
+            }
+
+            .nav-menu {
+                gap: 15px;
+            }
+
+            .nav-item {
+                font-size: 1rem;
+                padding: 6px 12px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 5%;
+            }
+
+            .logo-section {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .nav-menu {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .hero-title {
+                font-size: 1.8rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 1.4rem;
+            }
+
+            .download-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .download-btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+
+            .desktop-only {
+                display: none;
+            }
+
+            .mobile-only {
+                display: block;
+            }
+
+            .character-grid, .world-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 1.6rem;
+            }
+
+            .game-title {
+                font-size: 1.5rem;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .footer-section {
+                min-width: 100%;
+            }
+        }
+
+        .error-message {
+            background: rgba(255, 50, 50, 0.1);
+            border: 1px solid rgba(255, 100, 100, 0.5);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px;
+            color: #ff8080;
+        }
+
+        .refresh-button {
+            background: linear-gradient(45deg, #ff3333, #cc0000);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 15px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 0, 204, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 0, 204, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 0, 204, 0); }
+        }
+
+        .float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .bg-particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            pointer-events: none;
+        }
+
+        .floating-element {
+            position: absolute;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .floating-element:nth-child(1) {
+            top: 10%;
+            left: 5%;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, #ff00cc, transparent);
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(2) {
+            top: 60%;
+            right: 10%;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, #333399, transparent);
+            animation: float 10s ease-in-out infinite reverse;
+        }
+
+        .floating-element:nth-child(3) {
+            bottom: 20%;
+            left: 15%;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, #00ccff, transparent);
+            animation: float 7s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader"></div>
+        <div class="loading-text" id="loadingText">加载资源中...</div>
+    </div>
+
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+
+    <div id="mainContent" style="display: none;">
+        <header class="header" id="siteHeader">
+            <div class="logo-section">
+
+                <img class="logo" id="siteLogo" alt="游戏Logo">
+
+                <h1 class="game-title" id="siteTitle">游戏名称</h1>
+
+            </div>
+
+            <nav class="nav-menu" id="navMenu">
+
+            </nav>
+
+        </header>
+
+        <main class="main-content">
+
+            <div class="left-column">
+
+                <section class="hero-section">
+
+                    <div class="hero-content">
+
+                        <h2 class="hero-title" id="heroTitle">欢迎来到天彬TianBIN</h2>
+
+                        <p class="hero-subtitle" id="heroSubtitle">沉浸式冒险体验，探索未知的幻想大陆，结识各具特色的伙伴，书写属于你的传奇故事。</p>
+
+                        <button class="cta-button" id="ctaButton">立即开始冒险</button>
+
+                    </div>
+
+                </section>
+
+                <section class="section">
+
+                    <div class="section-header">
+
+                        <h3 class="section-title" id="announcementTitle">最新公告</h3>
+
+                        <a href="javascript:void(0)" class="view-all" id="viewAllAnnouncements">查看全部</a>
+
+                    </div>
+
+                    <div class="announcement-list" id="announcementList">
+
+                    </div>
+
+                </section>
+
+                <section class="section">
+
+                    <div class="section-header">
+
+                        <h3 class="section-title" id="characterTitle">角色介绍</h3>
+
+                        <a href="javascript:void(0)" class="view-all" id="viewAllCharacters">查看全部</a>
+
+                    </div>
+
+                    <div class="character-grid" id="characterGrid">
+
+
+                    </div>
+
+                </section>
+
+            </div>
+
+            <div class="right-column">
+
+                <section class="section download-section">
+
+                    <h3 class="download-title" id="downloadTitle">立即下载游戏</h3>
+
+                    <p class="download-desc" id="downloadDesc">加入探险者行列，体验沉浸式二次元世界，现在下载即可获得专属新手礼包！</p>
+
+                    <div class="download-buttons" id="downloadButtons">
+
+                    </div>
+
+                </section>
+
+                <section class="section">
+
+                    <div class="section-header">
+
+                        <h3 class="section-title" id="worldTitle">世界观设定</h3>
+
+                        <a href="javascript:void(0)" class="view-all" id="viewAllWorlds">查看全部</a>
+
+                    </div>
+
+                    <div class="world-grid" id="worldGrid">
+
+                    </div>
+
+                </section>
+
+                <section class="section">
+                    <div class="section-header">
+                        <h3 class="section-title" id="updateTitle">近期更新</h3>
+                    </div>
+                    <div class="announcement-list" id="updateList">
+
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4 class="footer-title" id="aboutTitle">关于我们</h4>
+                    <div class="footer-links" id="aboutLinks">
+
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title" id="supportTitle">支持</h4>
+                    <div class="footer-links" id="supportLinks">
+
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title" id="communityTitle">社区</h4>
+                    <div class="footer-links" id="communityLinks">
+
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title" id="legalTitle">法律</h4>
+                    <div class="footer-links" id="legalLinks">
+
+                    </div>
+                </div>
+            </div>
+            <div class="copyright" id="copyrightText">
+                © 2026 文天玩WenTianPlay. 保留所有权利.
+            </div>
+        </footer>
+    </div>
+
+    <div class="modal-overlay" id="announcementModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalAnnouncementTitle">公告标题</h3>
+                <button class="modal-close" id="closeAnnouncementModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-date" id="modalAnnouncementDate">2026-01-01</div>
+                <div class="modal-text" id="modalAnnouncementText">
+                    公告内容加载中...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="settingModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalSettingTitle">设定详情</h3>
+                <button class="modal-close" id="closeSettingModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-text" id="modalSettingContent">
+                    设定内容加载中...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let configData = null;
+        let announcementData = null;
+        let settingData = null;
+        let siteConfig = null;
+        let timeoutId = null;
+        let refreshTimeout = 9000;
+
+        const loadingScreen = document.getElementById('loadingScreen');
+        const loadingText = document.getElementById('loadingText');
+        const mainContent = document.getElementById('mainContent');
+        const announcementModal = document.getElementById('announcementModal');
+        const settingModal = document.getElementById('settingModal');
+        const closeAnnouncementModal = document.getElementById('closeAnnouncementModal');
+        const closeSettingModal = document.getElementById('closeSettingModal');
+
+        function startTimeout() {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                loadingText.textContent = '加载超时，刷新页面中...';
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            }, refreshTimeout);
+        }
+
+        function clearTimeoutTimer() {
+            clearTimeout(timeoutId);
+        }
+
+        async function fetchData(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP错误! 状态: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('获取数据失败:', error);
+                throw error;
+            }
+        }
+
+        async function loadAllData() {
+            startTimeout();
+            loadingText.textContent = '加载配置中...';
+
+            try {
+                const config = await fetchData('index.json');
+
+                loadingText.textContent = '加载网站配置中...';
+                siteConfig = await fetchData(config.dataUrl.tianbinapi);
+
+                loadingText.textContent = '加载公告内容中...';
+                announcementData = await fetchData(config.dataUrl.tianbinApi);
+
+                loadingText.textContent = '加载游戏设定中...';
+                settingData = await fetchData(config.dataUrl.tianbin);
+
+                configData = config;
+                clearTimeoutTimer();
+                renderWebsite();
+            } catch (error) {
+                loadingText.textContent = '数据加载失败，请检查网络连接';
+                console.error('加载数据失败:', error);
+
+                setTimeout(() => {
+                    loadingText.textContent = '尝试重新加载...';
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
+                }, 3000);
+            }
+        }
+
+        function renderWebsite() {
+            if (!siteConfig) return;
+
+            document.title = siteConfig.siteTitle || "二次元游戏官网";
+            document.getElementById('siteTitle').textContent = siteConfig.siteTitle || "二次元游戏";
+
+            if (siteConfig.siteLogo) {
+                document.getElementById('siteLogo').src = siteConfig.siteLogo;
+                document.getElementById('siteLogo').alt = siteConfig.siteTitle || "游戏Logo";
+            }
+
+            renderNavigation();
+            renderHeroSection();
+            renderAnnouncements();
+            renderCharacters();
+            renderWorldSettings();
+            renderDownloads();
+            renderUpdates();
+            renderFooter();
+
+            loadingScreen.style.opacity = '0';
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+                mainContent.style.display = 'block';
+                setTimeout(() => {
+                    mainContent.classList.add('fade-in');
+                }, 50);
+            }, 500);
+
+            createBackgroundParticles();
+        }
+
+        function renderNavigation() {
+            const navMenu = document.getElementById('navMenu');
+            if (!siteConfig.navigation || !Array.isArray(siteConfig.navigation)) return;
+
+            navMenu.innerHTML = '';
+            siteConfig.navigation.forEach(item => {
+                const navItem = document.createElement('a');
+                navItem.href = item.url || 'javascript:void(0)';
+                navItem.className = 'nav-item';
+                if (item.active) navItem.classList.add('active');
+                navItem.textContent = item.name || "菜单项";
+                navItem.id = item.id || '';
+                navMenu.appendChild(navItem);
+            });
+        }
+
+        function renderHeroSection() {
+            if (!siteConfig.hero) return;
+
+            const hero = siteConfig.hero;
+            document.getElementById('heroTitle').textContent = hero.title || "欢迎来到二次元世界";
+            document.getElementById('heroSubtitle').textContent = hero.subtitle || "沉浸式冒险体验，探索未知的幻想大陆";
+
+            const ctaButton = document.getElementById('ctaButton');
+            ctaButton.textContent = hero.ctaText || "立即开始冒险";
+            if (hero.ctaAction) {
+                ctaButton.onclick = () => {
+                    if (hero.ctaAction === 'download') {
+                        document.querySelector('.download-section').scrollIntoView({ behavior: 'smooth' });
+                    } else if (hero.ctaAction === 'announcements') {
+                        document.getElementById('viewAllAnnouncements').click();
+                    }
+                };
+            }
+
+            if (hero.backgroundImage) {
+                const heroSection = document.querySelector('.hero-section');
+                const existingBg = heroSection.querySelector('.hero-bg');
+                if (existingBg) existingBg.remove();
+
+                const heroBg = document.createElement('img');
+                heroBg.className = 'hero-bg';
+                heroBg.src = hero.backgroundImage;
+                heroBg.alt = "英雄背景图";
+                heroSection.prepend(heroBg);
+            }
+        }
+
+        function renderAnnouncements() {
+            const announcementList = document.getElementById('announcementList');
+            const announcementTitle = document.getElementById('announcementTitle');
+
+            if (siteConfig.sectionTitles && siteConfig.sectionTitles.announcements) {
+                announcementTitle.textContent = siteConfig.sectionTitles.announcements;
+            }
+
+            if (!announcementData || !Array.isArray(announcementData.announcements)) {
+                announcementList.innerHTML = '<div class="error-message">暂无公告</div>';
+                return;
+            }
+
+            announcementList.innerHTML = '';
+            const announcementsToShow = announcementData.announcements.slice(0, 5);
+
+            announcementsToShow.forEach(announcement => {
+                const announcementItem = document.createElement('div');
+                announcementItem.className = 'announcement-item';
+                announcementItem.innerHTML = `
+                    <div class="announcement-title">
+                        <span>${announcement.title || "无标题公告"}</span>
+                        <span class="announcement-date">${announcement.date || "日期未知"}</span>
+                    </div>
+                    <div class="announcement-preview">${announcement.preview || "公告内容预览..."}</div>
+                `;
+
+                announcementItem.addEventListener('click', () => {
+                    openAnnouncementModal(announcement);
+                });
+
+                announcementList.appendChild(announcementItem);
+            });
+
+            document.getElementById('viewAllAnnouncements').addEventListener('click', () => {
+                openAnnouncementModal(null, true);
+            });
+        }
+
+        function renderCharacters() {
+            const characterGrid = document.getElementById('characterGrid');
+            const characterTitle = document.getElementById('characterTitle');
+
+            if (siteConfig.sectionTitles && siteConfig.sectionTitles.characters) {
+                characterTitle.textContent = siteConfig.sectionTitles.characters;
+            }
+
+            if (!settingData || !settingData.characters || !Array.isArray(settingData.characters)) {
+                characterGrid.innerHTML = '<div class="error-message">角色信息加载中...</div>';
+                return;
+            }
+
+            characterGrid.innerHTML = '';
+            const charactersToShow = settingData.characters.slice(0, 4);
+
+            charactersToShow.forEach(character => {
+                const characterCard = document.createElement('div');
+                characterCard.className = 'character-card';
+                characterCard.innerHTML = `
+                    ${character.image ? `<img src="${character.image}" alt="${character.name || '角色'}" class="character-image">` : ''}
+                    <div class="character-name">
+                        <span>${character.name || "未知角色"}</span>
+                        <span class="character-type">${character.type || "类型未知"}</span>
+                    </div>
+                    <div class="character-desc">${character.brief || "角色描述..."}</div>
+                `;
+
+                characterCard.addEventListener('click', () => {
+                    openSettingModal('character', character);
+                });
+
+                characterGrid.appendChild(characterCard);
+            });
+
+            document.getElementById('viewAllCharacters').addEventListener('click', () => {
+                openSettingModal('character', null, true);
+            });
+        }
+
+        function renderWorldSettings() {
+            const worldGrid = document.getElementById('worldGrid');
+            const worldTitle = document.getElementById('worldTitle');
+
+            if (siteConfig.sectionTitles && siteConfig.sectionTitles.world) {
+                worldTitle.textContent = siteConfig.sectionTitles.world;
+            }
+
+            if (!settingData || !settingData.worldSettings || !Array.isArray(settingData.worldSettings)) {
+                worldGrid.innerHTML = '<div class="error-message">世界观信息加载中...</div>';
+                return;
+            }
+
+            worldGrid.innerHTML = '';
+            const worldsToShow = settingData.worldSettings.slice(0, 4);
+
+            worldsToShow.forEach(world => {
+                const worldCard = document.createElement('div');
+                worldCard.className = 'world-card';
+                worldCard.innerHTML = `
+                    ${world.image ? `<img src="${world.image}" alt="${world.name || '世界观'}" class="world-image">` : ''}
+                    <div class="world-name">
+                        <span>${world.name || "未知设定"}</span>
+                        <span class="world-type">${world.category || "分类未知"}</span>
+                    </div>
+                    <div class="world-desc">${world.brief || "世界观描述..."}</div>
+                `;
+
+                worldCard.addEventListener('click', () => {
+                    openSettingModal('world', world);
+                });
+
+                worldGrid.appendChild(worldCard);
+            });
+
+            document.getElementById('viewAllWorlds').addEventListener('click', () => {
+                openSettingModal('world', null, true);
+            });
+        }
+
+        function renderDownloads() {
+            const downloadTitle = document.getElementById('downloadTitle');
+            const downloadDesc = document.getElementById('downloadDesc');
+            const downloadButtons = document.getElementById('downloadButtons');
+
+            if (siteConfig.sectionTitles && siteConfig.sectionTitles.download) {
+                downloadTitle.textContent = siteConfig.sectionTitles.download;
+            }
+
+            if (siteConfig.downloadSection) {
+                downloadDesc.textContent = siteConfig.downloadSection.description || "加入探险者行列，体验沉浸式二次元世界";
+            }
+
+            downloadButtons.innerHTML = '';
+
+            if (siteConfig.downloadLinks && Array.isArray(siteConfig.downloadLinks)) {
+                siteConfig.downloadLinks.forEach(link => {
+                    const downloadBtn = document.createElement('a');
+                    downloadBtn.href = link.url || '#';
+                    downloadBtn.className = 'download-btn pulse';
+                    downloadBtn.target = '_blank';
+                    downloadBtn.innerHTML = `
+                        <span class="platform-icon">${link.icon || "📱"}</span>
+                        <span>${link.text || "下载游戏"}</span>
+                    `;
+                    downloadButtons.appendChild(downloadBtn);
+                });
+            } else {
+                downloadButtons.innerHTML = '<div class="error-message">下载信息即将上线</div>';
+            }
+        }
+
+        function renderUpdates() {
+            const updateList = document.getElementById('updateList');
+            const updateTitle = document.getElementById('updateTitle');
+
+            if (siteConfig.sectionTitles && siteConfig.sectionTitles.updates) {
+                updateTitle.textContent = siteConfig.sectionTitles.updates;
+            }
+
+            if (!announcementData || !Array.isArray(announcementData.updates)) {
+                updateList.innerHTML = '<div class="error-message">暂无更新信息</div>';
+                return;
+            }
+
+            updateList.innerHTML = '';
+            const updatesToShow = announcementData.updates.slice(0, 3);
+
+            updatesToShow.forEach(update => {
+                const updateItem = document.createElement('div');
+                updateItem.className = 'announcement-item';
+                updateItem.innerHTML = `
+                    <div class="announcement-title">
+                        <span>${update.title || "无标题更新"}</span>
+                        <span class="announcement-date">${update.date || "日期未知"}</span>
+                    </div>
+                    <div class="announcement-preview">${update.preview || "更新内容预览..."}</div>
+                `;
+
+                updateItem.addEventListener('click', () => {
+                    openAnnouncementModal(update);
+                });
+
+                updateList.appendChild(updateItem);
+            });
+        }
+
+        function renderFooter() {
+            const aboutTitle = document.getElementById('aboutTitle');
+            const supportTitle = document.getElementById('supportTitle');
+            const communityTitle = document.getElementById('communityTitle');
+            const legalTitle = document.getElementById('legalTitle');
+            const copyrightText = document.getElementById('copyrightText');
+
+            if (siteConfig.footerTitles) {
+                if (siteConfig.footerTitles.about) aboutTitle.textContent = siteConfig.footerTitles.about;
+                if (siteConfig.footerTitles.support) supportTitle.textContent = siteConfig.footerTitles.support;
+                if (siteConfig.footerTitles.community) communityTitle.textContent = siteConfig.footerTitles.community;
+                if (siteConfig.footerTitles.legal) legalTitle.textContent = siteConfig.footerTitles.legal;
+            }
+
+            if (siteConfig.copyright) {
+                copyrightText.textContent = siteConfig.copyright;
+            }
+
+            renderFooterLinks('aboutLinks', siteConfig.footerLinks ? siteConfig.footerLinks.about : null);
+            renderFooterLinks('supportLinks', siteConfig.footerLinks ? siteConfig.footerLinks.support : null);
+            renderFooterLinks('communityLinks', siteConfig.footerLinks ? siteConfig.footerLinks.community : null);
+            renderFooterLinks('legalLinks', siteConfig.footerLinks ? siteConfig.footerLinks.legal : null);
+        }
+
+        function renderFooterLinks(containerId, links) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            container.innerHTML = '';
+
+            if (!links || !Array.isArray(links)) {
+                const emptyMsg = document.createElement('span');
+                emptyMsg.textContent = "暂无链接";
+                emptyMsg.style.color = "#8080ff";
+                container.appendChild(emptyMsg);
+                return;
+            }
+
+            links.forEach(link => {
+                const linkElement = document.createElement('a');
+                linkElement.href = link.url || '#';
+                linkElement.className = 'footer-link';
+                linkElement.textContent = link.name || "链接";
+                if (link.newTab) {
+                    linkElement.target = '_blank';
+                }
+                container.appendChild(linkElement);
+            });
+        }
+
+        function openAnnouncementModal(announcement, showAll = false) {
+            const modal = document.getElementById('announcementModal');
+            const title = document.getElementById('modalAnnouncementTitle');
+            const date = document.getElementById('modalAnnouncementDate');
+            const text = document.getElementById('modalAnnouncementText');
+
+            if (showAll) {
+                title.textContent = "所有公告";
+                date.textContent = `共${announcementData ? announcementData.announcements.length : 0}条公告`;
+
+                let allAnnouncementsHTML = '';
+                if (announcementData && Array.isArray(announcementData.announcements)) {
+                    announcementData.announcements.forEach(item => {
+                        allAnnouncementsHTML += `
+                            <div class="announcement-item" style="margin-bottom: 20px; cursor: auto;">
+                                <div class="announcement-title">
+                                    <span>${item.title || "无标题公告"}</span>
+                                    <span class="announcement-date">${item.date || "日期未知"}</span>
+                                </div>
+                                <div class="announcement-preview">${item.content || item.preview || "公告内容..."}</div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    allAnnouncementsHTML = '<div class="error-message">暂无公告数据</div>';
+                }
+
+                text.innerHTML = allAnnouncementsHTML;
+            } else if (announcement) {
+                title.textContent = announcement.title || "公告详情";
+                date.textContent = announcement.date || "日期未知";
+                text.textContent = announcement.content || announcement.preview || "公告内容...";
+            }
+
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.style.opacity = '1';
+            }, 10);
+        }
+
+        function openSettingModal(type, item, showAll = false) {
+            const modal = document.getElementById('settingModal');
+            const title = document.getElementById('modalSettingTitle');
+            const content = document.getElementById('modalSettingContent');
+
+            if (showAll) {
+                title.textContent = type === 'character' ? "所有角色设定" : "所有世界观设定";
+
+                let allItemsHTML = '';
+                if (type === 'character' && settingData && settingData.characters) {
+                    settingData.characters.forEach(character => {
+                        allItemsHTML += `
+                            <div class="setting-category">
+                                <h4 class="setting-category-title">${character.name || "未知角色"}</h4>
+                                <div class="setting-item">
+                                    <div class="setting-item-title">角色类型</div>
+                                    <div class="setting-item-content">${character.type || "未指定"}</div>
+                                </div>
+                                <div class="setting-item">
+                                    <div class="setting-item-title">角色描述</div>
+                                    <div class="setting-item-content">${character.description || character.brief || "暂无描述"}</div>
+                                </div>
+                                ${character.abilities ? `
+                                <div class="setting-item">
+                                    <div class="setting-item-title">能力</div>
+                                    <div class="setting-item-content">${character.abilities}</div>
+                                </div>
+                                ` : ''}
+                            </div>
+                        `;
+                    });
+                } else if (type === 'world' && settingData && settingData.worldSettings) {
+                    settingData.worldSettings.forEach(world => {
+                        allItemsHTML += `
+                            <div class="setting-category">
+                                <h4 class="setting-category-title">${world.name || "未知设定"}</h4>
+                                <div class="setting-item">
+                                    <div class="setting-item-title">分类</div>
+                                    <div class="setting-item-content">${world.category || "未分类"}</div>
+                                </div>
+                                <div class="setting-item">
+                                    <div class="setting-item-title">详细设定</div>
+                                    <div class="setting-item-content">${world.description || world.brief || "暂无描述"}</div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    allItemsHTML = '<div class="error-message">暂无设定数据</div>';
+                }
+
+                content.innerHTML = allItemsHTML;
+            } else if (item) {
+                title.textContent = item.name || (type === 'character' ? "角色详情" : "设定详情");
+
+                let itemHTML = '';
+                if (type === 'character') {
+                    itemHTML = `
+                        <div class="setting-category">
+                            <h4 class="setting-category-title">${item.name || "未知角色"}</h4>
+                            <div class="setting-item">
+                                <div class="setting-item-title">角色类型</div>
+                                <div class="setting-item-content">${item.type || "未指定"}</div>
+                            </div>
+                            <div class="setting-item">
+                                <div class="setting-item-title">角色描述</div>
+                                <div class="setting-item-content">${item.description || item.brief || "暂无描述"}</div>
+                            </div>
+                            ${item.abilities ? `
+                            <div class="setting-item">
+                                <div class="setting-item-title">能力</div>
+                                <div class="setting-item-content">${item.abilities}</div>
+                            </div>
+                            ` : ''}
+                            ${item.backstory ? `
+                            <div class="setting-item">
+                                <div class="setting-item-title">背景故事</div>
+                                <div class="setting-item-content">${item.backstory}</div>
+                            </div>
+                            ` : ''}
+                        </div>
+                    `;
+                } else if (type === 'world') {
+                    itemHTML = `
+                        <div class="setting-category">
+                            <h4 class="setting-category-title">${item.name || "未知设定"}</h4>
+                            <div class="setting-item">
+                                <div class="setting-item-title">分类</div>
+                                <div class="setting-item-content">${item.category || "未分类"}</div>
+                            </div>
+                            <div class="setting-item">
+                                <div class="setting-item-title">详细设定</div>
+                                <div class="setting-item-content">${item.description || item.brief || "暂无描述"}</div>
+                            </div>
+                            ${item.details ? `
+                            <div class="setting-item">
+                                <div class="setting-item-title">补充信息</div>
+                                <div class="setting-item-content">${item.details}</div>
+                            </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }
+
+                content.innerHTML = itemHTML;
+            }
+
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.style.opacity = '1';
+            }, 10);
+        }
+
+        function createBackgroundParticles() {
+            const particlesContainer = document.querySelector('.floating-elements') || document.body;
+
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'bg-particle';
+
+                const size = Math.random() * 100 + 50;
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const duration = Math.random() * 20 + 10;
+                const delay = Math.random() * 5;
+
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${x}%`;
+                particle.style.top = `${y}%`;
+                particle.style.animation = `float ${duration}s ease-in-out ${delay}s infinite`;
+                particle.style.opacity = Math.random() * 0.1 + 0.05;
+
+                const colors = [
+                    'rgba(255, 0, 204, 0.1)',
+                    'rgba(51, 51, 153, 0.1)',
+                    'rgba(0, 204, 255, 0.1)',
+                    'rgba(255, 204, 0, 0.1)'
+                ];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.background = `radial-gradient(circle, ${color}, transparent)`;
+
+                document.body.appendChild(particle);
+            }
+        }
+
+        closeAnnouncementModal.addEventListener('click', () => {
+            announcementModal.style.opacity = '0';
+            setTimeout(() => {
+                announcementModal.style.display = 'none';
+            }, 300);
+        });
+
+        closeSettingModal.addEventListener('click', () => {
+            settingModal.style.opacity = '0';
+            setTimeout(() => {
+                settingModal.style.display = 'none';
+            }, 300);
+        });
+
+        announcementModal.addEventListener('click', (e) => {
+            if (e.target === announcementModal) {
+                announcementModal.style.opacity = '0';
+                setTimeout(() => {
+                    announcementModal.style.display = 'none';
+                }, 300);
+            }
+        });
+
+        settingModal.addEventListener('click', (e) => {
+            if (e.target === settingModal) {
+                settingModal.style.opacity = '0';
+                setTimeout(() => {
+                    settingModal.style.display = 'none';
+                }, 300);
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', loadAllData);
+
+        window.addEventListener('beforeunload', () => {
+            clearTimeoutTimer();
+        });
+    </script>
+</body>
+</html>
