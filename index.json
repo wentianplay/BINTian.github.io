@@ -1,0 +1,6 @@
+{
+  "dataUrl": "https://api.wentianplay.com/api/tianbinapi.json,https://api.wentianplay.com/api/tianbin.json,https://api.wentianplay.com/api/tianbin-api.json",
+  "version": "1.0",
+  "lastUpdated": "2026-02-09",
+  "description": "调用配置文件 - 配置远程数据源"
+}
